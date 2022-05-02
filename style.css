@@ -1,0 +1,41 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  width: 88%;
+  max-width: 40em;
+  margin: 1em auto;
+  line-height: 1.5;
+  font-family: "Comic Sans MS", sans-serif;
+  background: #fff;
+}
+
+label,
+input {
+  display: block;
+}
+
+input,
+button {
+  font: inherit;
+}
+
+#guess-list {
+  text-transform: capitalize;
+}
+
+#guess-list:empty {
+  display: none;
+}
+
+/* https://ar.al/2021/08/24/implementing-dark-mode-in-a-handful-of-lines-of-css-with-css-filters/ */
+@media (prefers-color-scheme: dark) {
+  html {
+    background: #000;
+  }
+
+  body {
+    filter: invert(100%) hue-rotate(180deg);
+  }
+}
