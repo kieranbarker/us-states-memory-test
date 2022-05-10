@@ -2,7 +2,7 @@
   export let count;
 </script>
 
-<p><b id="count">{count}</b> states to go...</p>
+<p><b>{count}</b> states to go...</p>
 
 <form on:submit|preventDefault>
   <p>
