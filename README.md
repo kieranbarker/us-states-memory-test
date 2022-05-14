@@ -1,4 +1,4 @@
-# 🇺🇸 US states memory test
+# Remember the States
 
 Can you remember all 50 states?
 
