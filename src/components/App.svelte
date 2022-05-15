@@ -1,5 +1,5 @@
 <script>
-  import { onMount, afterUpdate } from "svelte";
+  import { afterUpdate } from "svelte";
   import { getData, setData } from "../storage";
 
   import states from "../states";
@@ -7,25 +7,27 @@
   import Game from "./Game.svelte";
   import PlayAgain from "./PlayAgain.svelte";
 
-  let prevGuesses = [];
+  let prevGuesses = getData();
 
-  $: count = states.length - prevGuesses.length;
+  $: count = states.length - prevGuesses.filter((guess) => guess !== "").length;
 
-  onMount(() => (prevGuesses = getData()));
   afterUpdate(() => setData(prevGuesses));
 
   function reset() {
-    prevGuesses = [];
+    prevGuesses = new Array(states.length).fill("");
   }
 
   function handleSubmit(event) {
     const input = event.target.elements["guess"];
 
     const guess = input.value.toLowerCase().trim();
-    if (!states.includes(guess) || prevGuesses.includes(guess)) return;
+    if (prevGuesses.includes(guess)) return;
+
+    const index = states.indexOf(guess);
+    if (index < 0) return;
 
     input.value = "";
-    prevGuesses = [...prevGuesses, guess];
+    prevGuesses[index] = guess;
   }
 </script>
 
@@ -48,7 +50,7 @@
   {/if}
 
   <ol>
-    {#each prevGuesses as prevGuess (prevGuess)}
+    {#each prevGuesses as prevGuess, i (i)}
       <li>{prevGuess}</li>
     {/each}
   </ol>

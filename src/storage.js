@@ -1,7 +1,12 @@
+import states from "./states";
+
 const storageKey = "us-states-memory-test";
 
 function getData() {
-  return JSON.parse(localStorage.getItem(storageKey)) || [];
+  return (
+    JSON.parse(localStorage.getItem(storageKey)) ||
+    new Array(states.length).fill("")
+  );
 }
 
 function setData(data) {
