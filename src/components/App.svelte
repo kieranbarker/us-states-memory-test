@@ -54,6 +54,12 @@
       <li>{prevGuess}</li>
     {/each}
   </ol>
+
+  {#if count < states.length}
+    <p>
+      <button type="button" on:click={reset}>Start over</button>
+    </p>
+  {/if}
 </main>
 
 <style>
