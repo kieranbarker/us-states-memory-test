@@ -6,7 +6,7 @@
   import states from "../states";
 
   import Game from "./Game.svelte";
-  import PlayAgain from "./PlayAgain.svelte";
+  import Win from "./Win.svelte";
 
   let prevGuesses = getData();
   let error = { type: "", message: "" };
@@ -64,7 +64,7 @@
   {#if count}
     <Game {count} {error} on:submit={handleSubmit} />
   {:else}
-    <PlayAgain on:click={reset} />
+    <Win on:click={reset} />
   {/if}
 
   <ol>
