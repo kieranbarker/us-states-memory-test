@@ -1,6 +1,7 @@
 <script>
   import { afterUpdate } from "svelte";
   import { getData, setData } from "../storage";
+  import { toTitleCase } from "../utils";
 
   import states from "../states";
 
@@ -8,6 +9,7 @@
   import PlayAgain from "./PlayAgain.svelte";
 
   let prevGuesses = getData();
+  let error = { type: "", message: "" };
 
   $: count = states.length - prevGuesses.filter((guess) => guess !== "").length;
 
@@ -19,15 +21,31 @@
 
   function handleSubmit(event) {
     const input = event.target.elements["guess"];
+    if (!input) return;
 
     const guess = input.value.toLowerCase().trim();
-    if (prevGuesses.includes(guess)) return;
+
+    if (prevGuesses.includes(guess)) {
+      error.type = "warning";
+      error.message = `You already guessed ${toTitleCase(guess)}.`;
+      return;
+    }
 
     const index = states.indexOf(guess);
-    if (index < 0) return;
+
+    if (index < 0) {
+      error.type = "danger";
+      error.message = `${toTitleCase(guess)} isn't a US state.`;
+      return;
+    }
 
     input.value = "";
     prevGuesses[index] = guess;
+
+    if (error.message) {
+      error.type = "";
+      error.message = "";
+    }
   }
 </script>
 
@@ -44,7 +62,7 @@
 
 <main>
   {#if count}
-    <Game {count} on:submit={handleSubmit} />
+    <Game {count} {error} on:submit={handleSubmit} />
   {:else}
     <PlayAgain on:click={reset} />
   {/if}
