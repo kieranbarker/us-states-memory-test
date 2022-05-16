@@ -20,10 +20,11 @@
   }
 
   function handleSubmit(event) {
-    const input = event.target.elements["guess"];
+    const input = event.target.elements.guess;
     if (!input) return;
 
     const guess = input.value.toLowerCase().trim();
+    if (!guess) return;
 
     if (prevGuesses.includes(guess)) {
       error.type = "warning";
