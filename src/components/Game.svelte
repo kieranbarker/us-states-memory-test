@@ -5,7 +5,7 @@
 
 <p><b>{count}</b> states to go...</p>
 
-{#if error.message}
+{#if error.type && error.message}
   <p class="alert {`alert-${error.type}`}">{error.message}</p>
 {/if}
 

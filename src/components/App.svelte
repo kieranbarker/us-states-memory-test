@@ -6,7 +6,6 @@
   import states from "../states";
 
   import Game from "./Game.svelte";
-  import Win from "./Win.svelte";
 
   let prevGuesses = getData();
   let error = { type: "", message: "" };
@@ -43,7 +42,7 @@
     input.value = "";
     prevGuesses[index] = guess;
 
-    if (error.message) {
+    if (error.type || error.message) {
       error.type = "";
       error.message = "";
     }
@@ -65,7 +64,7 @@
   {#if count}
     <Game {count} {error} on:submit={handleSubmit} />
   {:else}
-    <Win on:click={reset} />
+    <p><b>Good work, you remembered them all!</b></p>
   {/if}
 
   <ol>
