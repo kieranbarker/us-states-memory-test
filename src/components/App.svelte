@@ -1,14 +1,15 @@
 <script>
   import { afterUpdate } from "svelte";
   import { getData, setData } from "../storage";
-  import { toTitleCase } from "../utils";
+  import { shuffle, toTitleCase } from "../utils";
 
   import states from "../states";
+  import hints from "../hints";
 
   import Game from "./Game.svelte";
 
   let prevGuesses = getData();
-  let error = { type: "", message: "" };
+  let alert = { type: "", message: "" };
 
   $: numGuessed = prevGuesses.filter((guess) => guess !== "").length;
   $: numRemaining = states.length - numGuessed;
@@ -19,6 +20,11 @@
     prevGuesses = new Array(states.length).fill("");
   }
 
+  function showHint() {
+    alert.type = "info";
+    alert.message = shuffle([...hints])[0];
+  }
+
   function handleSubmit(event) {
     const input = event.target.elements.guess;
     if (!input) return;
@@ -27,25 +33,25 @@
     if (!guess) return;
 
     if (prevGuesses.includes(guess)) {
-      error.type = "warning";
-      error.message = `You already guessed ${toTitleCase(guess)}.`;
+      alert.type = "warning";
+      alert.message = `You already guessed ${toTitleCase(guess)}.`;
       return;
     }
 
     const index = states.indexOf(guess);
 
     if (index < 0) {
-      error.type = "danger";
-      error.message = `${toTitleCase(guess)} isn't a US state.`;
+      alert.type = "danger";
+      alert.message = `${toTitleCase(guess)} isn't a US state.`;
       return;
     }
 
     input.value = "";
     prevGuesses[index] = guess;
 
-    if (error.type || error.message) {
-      error.type = "";
-      error.message = "";
+    if (alert.type || alert.message) {
+      alert.type = "";
+      alert.message = "";
     }
   }
 </script>
@@ -63,7 +69,13 @@
 
 <main>
   {#if numRemaining}
-    <Game {numGuessed} {numRemaining} {error} on:submit={handleSubmit} />
+    <Game
+      {numGuessed}
+      {numRemaining}
+      {alert}
+      on:submit={handleSubmit}
+      on:click={showHint}
+    />
   {:else}
     <p><b>Good work, you remembered them all!</b></p>
   {/if}

@@ -1,6 +1,6 @@
 <script>
   export let numGuessed, numRemaining;
-  export let error = { type: "", message: "" };
+  export let alert = { type: "", message: "" };
 </script>
 
 <ul>
@@ -8,8 +8,8 @@
   <li>Remaining: <b>{numRemaining}</b></li>
 </ul>
 
-{#if error.type && error.message}
-  <p class="alert {`alert-${error.type}`}">{error.message}</p>
+{#if alert.type && alert.message}
+  <p class="alert {`alert-${alert.type}`}">{alert.message}</p>
 {/if}
 
 <form on:submit|preventDefault>
@@ -19,6 +19,7 @@
   </p>
   <p>
     <button type="submit">Guess</button>
+    <button type="button" on:click>Hint</button>
   </p>
 </form>
 
@@ -38,6 +39,11 @@
     margin-bottom: 1rem;
     border: 1px solid transparent;
     border-radius: 0.25rem;
+  }
+  .alert.alert-info {
+    color: #055160;
+    background-color: #cff4fc;
+    border-color: #b6effb;
   }
   .alert.alert-warning {
     color: #664d03;

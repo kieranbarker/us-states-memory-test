@@ -1,0 +1,27 @@
+const hints = [
+  "There are 4 states beginning with 'A'.",
+  "There are 3 states beginning with 'C'.",
+  "There is 1 state beginning with 'D'.",
+  "There is 1 state beginning with 'F'.",
+  "There is 1 state beginning with 'G'.",
+  "There is 1 state beginning with 'H'.",
+  "There are 4 states beginning with 'I'.",
+  "There are 2 states beginning with 'K'.",
+  "There is 1 state beginning with 'L'.",
+  "There are 8 states beginning with 'M'.",
+  "There are 8 states beginning with 'N'.",
+  "There are 3 states beginning with 'O'.",
+  "There is 1 state beginning with 'P'.",
+  "There is 1 state beginning with 'R'.",
+  "There are 2 states beginning with 'S'.",
+  "There are 2 states beginning with 'T'.",
+  "There is 1 state beginning with 'U'.",
+  "There are 2 states beginning with 'V'.",
+  "There are 4 states beginning with 'W'.",
+  "There are 4 states beginning with 'New'.",
+  "There are 2 states beginning with 'North'.",
+  "There are 2 states beginning with 'South'.",
+  "There is 1 state beginning with 'West'.",
+];
+
+export default hints;
