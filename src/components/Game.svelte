@@ -1,9 +1,12 @@
 <script>
-  export let count;
+  export let numGuessed, numRemaining;
   export let error = { type: "", message: "" };
 </script>
 
-<p><b>{count}</b> states to go...</p>
+<ul>
+  <li>Guessed: <b>{numGuessed}</b></li>
+  <li>Remaining: <b>{numRemaining}</b></li>
+</ul>
 
 {#if error.type && error.message}
   <p class="alert {`alert-${error.type}`}">{error.message}</p>

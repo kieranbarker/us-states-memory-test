@@ -10,7 +10,8 @@
   let prevGuesses = getData();
   let error = { type: "", message: "" };
 
-  $: count = states.length - prevGuesses.filter((guess) => guess !== "").length;
+  $: numGuessed = prevGuesses.filter((guess) => guess !== "").length;
+  $: numRemaining = states.length - numGuessed;
 
   afterUpdate(() => setData(prevGuesses));
 
@@ -61,8 +62,8 @@
 </header>
 
 <main>
-  {#if count}
-    <Game {count} {error} on:submit={handleSubmit} />
+  {#if numRemaining}
+    <Game {numGuessed} {numRemaining} {error} on:submit={handleSubmit} />
   {:else}
     <p><b>Good work, you remembered them all!</b></p>
   {/if}
@@ -73,7 +74,7 @@
     {/each}
   </ol>
 
-  {#if count < states.length}
+  {#if numGuessed}
     <p>
       <button type="button" on:click={reset}>Start over</button>
     </p>
