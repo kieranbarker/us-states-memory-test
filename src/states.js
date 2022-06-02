@@ -51,4 +51,16 @@ const states = [
   "wyoming",
 ];
 
-export default states;
+const stateCount = states.reduce((count, state) => {
+  const letter = state.charAt(0);
+
+  if (count.hasOwnProperty(letter)) {
+    count[letter]++;
+  } else {
+    count[letter] = 1;
+  }
+
+  return count;
+}, {});
+
+export { states as default, stateCount };

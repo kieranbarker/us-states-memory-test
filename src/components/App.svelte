@@ -2,27 +2,50 @@
   import { afterUpdate } from "svelte";
   import { getData, setData } from "../storage";
   import { shuffle, toTitleCase } from "../utils";
-
-  import states from "../states";
-  import hints from "../hints";
-
+  import states, { stateCount } from "../states";
   import Game from "./Game.svelte";
 
-  let prevGuesses = getData();
+  let prevHint;
+
+  let { prevGuesses, count } = getData();
   let alert = { type: "", message: "" };
 
   $: numGuessed = prevGuesses.filter((guess) => guess !== "").length;
   $: numRemaining = states.length - numGuessed;
 
-  afterUpdate(() => setData(prevGuesses));
+  $: hints = Object.keys(count).map((letter) => {
+    const letterCount = count[letter];
+    const letterUpper = letter.toUpperCase();
+
+    if (letterCount === 1) {
+      return `There is ${letterCount} more state beginning with '${letterUpper}'.`;
+    }
+
+    return `There are ${letterCount} more states beginning with '${letterUpper}'.`;
+  });
+
+  afterUpdate(() => setData({ count, prevGuesses }));
 
   function reset() {
+    count = { ...stateCount };
     prevGuesses = new Array(states.length).fill("");
   }
 
   function showHint() {
+    let hint = shuffle(hints)[0];
+
+    while (hint === prevHint) {
+      if (hints.length === 1) {
+        break;
+      }
+
+      hint = shuffle(hints)[0];
+    }
+
+    prevHint = hint;
+
     alert.type = "info";
-    alert.message = shuffle([...hints])[0];
+    alert.message = hint;
   }
 
   function handleSubmit(event) {
@@ -46,8 +69,17 @@
       return;
     }
 
+    const letter = guess.charAt(0);
+
     input.value = "";
     prevGuesses[index] = guess;
+
+    if (count[letter] > 1) {
+      count[letter]--;
+    } else {
+      delete count[letter];
+      count = count;
+    }
 
     if (alert.type || alert.message) {
       alert.type = "";

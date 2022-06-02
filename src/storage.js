@@ -1,11 +1,13 @@
-import states from "./states";
+import states, { stateCount } from "./states";
 
 const storageKey = "us-states-memory-test";
 
 function getData() {
   return (
-    JSON.parse(localStorage.getItem(storageKey)) ||
-    new Array(states.length).fill("")
+    JSON.parse(localStorage.getItem(storageKey)) || {
+      count: { ...stateCount },
+      prevGuesses: new Array(states.length).fill(""),
+    }
   );
 }
 
