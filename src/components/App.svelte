@@ -1,15 +1,18 @@
 <script>
   import { afterUpdate } from "svelte";
-  import { getData, setData } from "../storage";
+  import { getData, setData, resetData } from "../storage";
   import { shuffle, toTitleCase } from "../utils";
-  import states, { stateCount } from "../states";
+  import states from "../states";
   import Flag from "./Flag.svelte";
   import Form from "./Form.svelte";
+  import Stopwatch from "./Stopwatch.svelte";
 
   let prevHint;
 
-  let { count, prevGuesses } = getData();
+  let { count, elapsed, prevGuesses } = getData();
   let alert = { type: "", message: "" };
+
+  $: start = Date.now() - elapsed;
 
   $: numGuessed = prevGuesses.filter((guess) => guess !== "").length;
   $: numRemaining = states.length - numGuessed;
@@ -25,11 +28,10 @@
     return `There are ${letterCount} more states beginning with ${letterUpper}.`;
   });
 
-  afterUpdate(() => setData({ count, prevGuesses }));
+  afterUpdate(() => setData({ count, elapsed, prevGuesses }));
 
   function reset() {
-    count = { ...stateCount };
-    prevGuesses = new Array(states.length).fill("");
+    ({ count, elapsed, prevGuesses } = resetData());
   }
 
   function showHint() {
@@ -98,6 +100,7 @@
 
 <main>
   {#if numRemaining}
+    <Stopwatch {start} {elapsed} setElapsed={(ms) => (elapsed = ms)} />
     <Form
       {numGuessed}
       {numRemaining}
@@ -106,7 +109,13 @@
       on:click={showHint}
     />
   {:else}
-    <p><b>Good work! You remembered them all.</b></p>
+    <p>
+      Good work! You remembered them all in <Stopwatch
+        {start}
+        {elapsed}
+        stopped={true}
+      />.
+    </p>
   {/if}
 
   <ol>
@@ -115,7 +124,7 @@
     {/each}
   </ol>
 
-  {#if numGuessed}
+  {#if numGuessed === states.length}
     <p>
       <button type="button" on:click={reset}>Start again</button>
     </p>
